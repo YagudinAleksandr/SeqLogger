@@ -6,8 +6,17 @@ namespace SeqLogger.Services
 {
     internal class LoggerService : ILoggerService
     {
+        /// <inheritdoc cref="ILogger{TCategoryName}"/>
         private readonly ILogger<LoggerService> _logger;
+
+        /// <summary>
+        /// Название микросервиса
+        /// </summary>
         private readonly string _microserviceName;
+
+        /// <summary>
+        /// Путь для сохранения файла логов
+        /// </summary>
         private readonly string _errorLogPath;
 
         /// <summary>
@@ -27,7 +36,7 @@ namespace SeqLogger.Services
         /// <summary>
         /// Запись сообщения в лог с указанным уровнем
         /// </summary>
-        private void Log<TService>(LogLevel logLevel, string message, object[] args, Exception exception = null)
+        private void Log<TService>(LogLevel logLevel, string message, object[] args, Exception? exception = null)
         {
             var serviceName = typeof(TService).Name;
 
@@ -47,7 +56,7 @@ namespace SeqLogger.Services
             // Дополнительная запись ошибок в файл
             if (logLevel == LogLevel.Error)
             {
-                WriteErrorToFile(serviceName, message, exception);
+                WriteErrorToFile(serviceName, message, exception ?? new Exception());
             }
         }
 
